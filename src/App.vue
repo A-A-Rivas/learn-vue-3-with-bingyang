@@ -31,11 +31,9 @@ let number = ref(1)
 
 function changeMessageToUpperCase() {
   message.value = message.value.toUpperCase()
-  console.log(message.value)
 }
 function incrementNumber() {
   number.value += 1
-  console.log(number.value)
 }
 
 let wizard = ref({
@@ -45,7 +43,7 @@ let wizard = ref({
   age: 17,
   wand: {
     core: 'Phoenix feather',
-    wood: 'Holly'
+    wood: 'Holy'
   }
 })
 
