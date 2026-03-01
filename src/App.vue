@@ -5,7 +5,6 @@
     <div>
       <span>Name:</span>
       <span>
-        <!-- formData.name is synced after "change" event instead of "input" event. -->
         <input type="text" v-model.lazy="formData.name" />
       </span>
     </div>
@@ -21,13 +20,13 @@
     <div>
       <span>Age:</span>
       <span>
-        <!-- Input is automatically typecast as a number. -->
+
         <input type="text" id="age" v-model.number="formData.age" />
       </span>
     </div>
     <div>
       <span>Hobbies:</span>
-      <!-- We can bind multiple checkboxes to the same array. -->
+
       <input type="checkbox" value="basketball" v-model="formData.hobbies" />
       <label for="basketball">Basketball</label>
       <input type="checkbox" value="football" v-model="formData.hobbies" />
@@ -47,7 +46,7 @@
     </div>
     <div>
       <span>Description:</span>
-      <!-- Leading and trailing whitespace is removed automatically. -->
+
       <textarea
         v-model.trim="formData.desc"
         @keyup.enter="submitForm"
@@ -55,7 +54,7 @@
     </div>
     <div>
       <input type="reset" value="Reset" @click="resetForm" />
-      <!-- Prevent the form from submitting through form action. -->
+
       <input type="submit" value="Submit" @click.prevent="submitForm" />
     </div>
   </form>
@@ -88,7 +87,6 @@ function resetForm() {
 
 function submitForm() {
   console.log(JSON.stringify(formData.value))
-  // We can use axios or fetch() to submit data to the back end.
 }
 </script>
 
