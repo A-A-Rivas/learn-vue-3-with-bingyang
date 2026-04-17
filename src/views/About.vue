@@ -9,7 +9,7 @@ import { onBeforeRouteLeave } from 'vue-router';
 
 // this hook will be called when we leave the about page
 onBeforeRouteLeave((to, from) => {
-    window.alert('Don\'t forget to like us on FaceBook!')
+    window.alert('Don\'t forget to like us on Facebook!')
 })
 </script>
 
