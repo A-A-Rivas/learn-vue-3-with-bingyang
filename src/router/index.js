@@ -18,6 +18,22 @@ const router = createRouter({
     // provides history implementation to use
     history: createWebHistory(),
 
+    scrollBehavior(to, from, savedPosition) {
+
+        const scrollBehaviorOptions = {
+            top: 0,
+            behavior: 'smooth'
+        }
+
+        // if the route has a meta field with a scrollToElement property, scroll to that element
+        if (to.meta.scrollToElement) {
+            scrollBehaviorOptions.el = to.meta.scrollToElement
+        }
+
+        // if the route has a savedPosition, return it, otherwise return the scrollBehaviorOptions 
+        return savedPosition ?? scrollBehaviorOptions
+    },
+
     // defines some routes, each route record should map to a component
     routes: [
         {path:'/',
@@ -40,7 +56,7 @@ const router = createRouter({
                     default: BlogPost,
                     sidebar: Ads
                 },
-                meta: {requiresAuth: true}}
+                meta: {requiresAuth: true, scrollToElement:'.blog-posts-layout'}}
             ]},
             {path: '/about', name: 'about', component: About, meta: {requiresAuth: false}},
         ]},
