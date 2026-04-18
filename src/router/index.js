@@ -1,16 +1,7 @@
-import About from "@/views/About.vue";
-import BlogPosts from "@/views/BlogPosts.vue";
-import Home from "@/views/Home.vue";
-import BlogPost from "@/views/BlogPost.vue";
-import { createRouter, createWebHistory } from "vue-router";
-import BlogPostGreeting from "@/views/BlogPostGreeting.vue";
-import NotFound from "@/views/NotFound.vue";
-import Ads from "@/views/Ads.vue";
-import Login from "@/views/Login.vue";
-import MainLayout from "@/views/MainLayout.vue";
+import { createRouter, createWebHistory } from 'vue-router'
 import { isAuthenticated } from "@/apis/auth";
 
-
+// no need to import the components here, they are lazy-loaded
 
 // create a router instance 
 const router = createRouter({
@@ -38,32 +29,48 @@ const router = createRouter({
     routes: [
         {path:'/',
          name:'mainLayout',
-         component: MainLayout,
+         component: () => import('@/views/MainLayout.vue'),
          redirect: {name: 'home'},
          children: [
-            {path: '/home', name: 'home', component: Home, meta: {requiresAuth: false}},
+            {path: '/home',
+             name: 'home',
+             component: () => import('@/views/Home.vue'),
+             meta: {requiresAuth: false}
+            },
             {path: '/blogPosts',
             name: 'blogPosts',
-            component: BlogPosts,
+            component: () => import('@/views/BlogPosts.vue'),
             meta: {
                 enterAnimation: 'animate__animated animate__bounceIn',
                 leaveAnimation: 'animate__animated animate__bounceOut'
             },
             redirect: {name: 'blogPostsGreeting'},
             children:[
-                {path: '', name: 'blogPostsGreeting', component: BlogPostGreeting, meta: {requiresAuth: false}},
+                {path: '',
+                 name: 'blogPostsGreeting',
+                 component: () => import('@/views/BlogPostGreeting.vue'),
+                 meta: {requiresAuth: false}
+                },
                 {path:'/blogPosts/:id(\\d+)', name:'blogPost', components: {
-                    default: BlogPost,
-                    sidebar: Ads
+                    default: () => import('@/views/BlogPost.vue'),
+                    sidebar: () => import('@/views/Ads.vue')
                 },
                 meta: {requiresAuth: true, scrollToElement:'.blog-posts-layout'}}
             ]},
-            {path: '/about', name: 'about', component: About, meta: {requiresAuth: false}},
+            {path: '/about',
+             name: 'about',
+             component: () => import('@/views/About.vue'),
+             meta: {requiresAuth: false}
+            },
         ]},
-        {path:'/login', name:'login', component: Login, meta: {requiresAuth: false}},
+        {path:'/login',
+         name:'login',
+         component: () => import('@/views/Login.vue'),
+         meta: {requiresAuth: false}
+        },
         {path: '/:pathMatch(.*)*',  // matches any path that has not been matched by a previous route
          name: 'notFound',
-         component: NotFound,
+         component: () => import('@/views/NotFound.vue'),
          meta: {requiresAuth: false}}
     ]
 })
