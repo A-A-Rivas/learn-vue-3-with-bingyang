@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { isAuthenticated } from "@/apis/auth";
+import { getUserRole, isAuthenticated } from "@/apis/auth";
 
 // no need to import the components here, they are lazy-loaded
 
@@ -35,12 +35,14 @@ const router = createRouter({
             {path: '/home',
              name: 'home',
              component: () => import('@/views/Home.vue'),
-             meta: {requiresAuth: false}
+             meta: {requiresAuth: false, title: 'Home', isNavLink: true}
             },
             {path: '/blogPosts',
             name: 'blogPosts',
             component: () => import('@/views/BlogPosts.vue'),
             meta: {
+                title: 'Blog Posts',
+                isNavLink: true,
                 enterAnimation: 'animate__animated animate__bounceIn',
                 leaveAnimation: 'animate__animated animate__bounceOut'
             },
@@ -60,7 +62,7 @@ const router = createRouter({
             {path: '/about',
              name: 'about',
              component: () => import('@/views/About.vue'),
-             meta: {requiresAuth: false}
+             meta: {requiresAuth: false, title: 'About', isNavLink: true}
             },
         ]},
         {path:'/login',
@@ -82,6 +84,12 @@ router.beforeEach((to, from) => {
 
         // redirects to the login page with the originally requested page as the redirect query parameter
         return {name: 'login', query: {redirect: to.fullPath}}
+    }
+
+    // checks role-based access
+    const userRole = getUserRole()
+    if (to.meta.roles && !to.meta.roles.includes(userRole)) {
+        return {name: 'home'}   // redirects to the home page
     }
 })
 

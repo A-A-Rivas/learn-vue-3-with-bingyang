@@ -8,7 +8,7 @@
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="text" id="password" name="password" v-model="password" required placeholder="Enter your password">
+                <input type="password" id="password" name="password" v-model="password" required placeholder="Enter your password">
             </div>
             <button type="submit" class="login-button">Login</button>
         </form>
@@ -16,18 +16,30 @@
 </template>
 
 <script setup>
-import { login } from '@/apis/auth';
+import { getUserRole, login } from '@/apis/auth';
 import { useRouter, useRoute } from 'vue-router';
 import { ref } from 'vue';
+import { vipRoute } from '@/router/dynamicRoutes';
+import { useNavStore } from '@/stores/navStore';
 
 const username = ref('')
 const password = ref('')
 const router = useRouter()
 const route = useRoute()
 
+const { updateNavRoutes } = useNavStore()
+
 async function handleLogin() {
     try {
         await login(username.value, password.value)
+
+        const userRole = getUserRole()
+
+        // dynamically add VIP route if user is a VIP and route is not already added
+        if (userRole === 'vip' && !router.hasRoute('vipExclusive')) {
+            router.addRoute('mainLayout', vipRoute)
+            updateNavRoutes()  // updates the navigation store to reflect new routes
+        }
 
         // redirects to the page the user originally wanted to visit or fallback to home
         const redirectPath = route.query.redirect || {name: 'home'}
